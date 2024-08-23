@@ -1,9 +1,7 @@
 // src/components/FileUpload.js
 import React, { useState } from 'react';
 import { readFile } from '../components/utils/excelParcer';
-import './fileupload.css';  // Import the CSS file
-
-
+import "./fileupload.css"
 const FileUpload = () => {
     const [fileData, setFileData] = useState(null);
 
@@ -16,6 +14,24 @@ const FileUpload = () => {
         }
     };
 
+    const handleSubmit = async () => {
+        try {
+            const response = await fetch('/api/upload', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(fileData),
+            });
+            if (response.ok) {
+                alert('Data uploaded successfully');
+            } else {
+                alert('Error uploading data');
+            }
+        } catch (error) {
+            alert('Error uploading data');
+        }
+    };
     const renderTable = (data) => {
         if (!data || data.length === 0) return null;
 
@@ -50,6 +66,7 @@ const FileUpload = () => {
                 <div>
                     <h3>File Data:</h3>
                     {renderTable(fileData)}
+                    <button onClick={handleSubmit}>Submit</button>
                 </div>
             )}
         </div>
